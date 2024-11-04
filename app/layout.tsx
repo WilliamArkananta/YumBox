@@ -25,10 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${quicksand.className} ${nunito.className} antialiased`}
+        className={`${quicksand.className} ${nunito.className} antialiased bg-background-primary`}
       >
         <Navbar pageTitleText="This is the title" backButtonOn />
-        <MenuModal />
         {children}
       </body>
     </html>

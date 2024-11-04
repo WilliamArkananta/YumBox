@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Quicksand } from "next/font/google";
 import NavItem from "./NavItem";
-import { NavButton, NavMenu } from "./NavButton";
 import Searchbar from "../Searchbar";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -25,9 +24,18 @@ export const Navbar = ({
   pageTitleText,
   backButtonOn,
 }: NavbarProps) => {
+  // State visibility menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Toggle sidebar open
+  const toggleMenu = () => {
+    setIsMenuOpen((prevState) => !prevState);
+  };
+
   return (
     <nav className="flex justify-center items-center p-4 bg-background-brand">
       <div className="mainHeader flex justify-center items-center gap-7 flex-1">
+        {/* SHOW BACK BUTTON */}
         {!backButtonOn && (
           <Link href="/" className="hidden lg:flex">
             <motion.div
@@ -38,6 +46,8 @@ export const Navbar = ({
             </motion.div>
           </Link>
         )}
+
+        {/* SHOW lOGO */}
         {backButtonOn && (
           <div className="logo flex items-center gap-4">
             <a href="/home" className="flex justify-center items-center gap-4">
@@ -50,6 +60,8 @@ export const Navbar = ({
             </a>
           </div>
         )}
+
+        {/* SHOW PAGE TITLE BUTTON */}
         {pageTitleOn && (
           <div className="pageTitle">
             <h1
@@ -60,12 +72,14 @@ export const Navbar = ({
           </div>
         )}
 
+        {/* NAVIGATION ITEMS */}
         <div className="NavItems hidden lg:flex items-center gap-7">
           <NavItem children="Category" />
           <NavItem children="Deals" />
           <NavItem children="Help/Support" />
         </div>
         <Searchbar />
+        {/* NAVIGATION BUTTON */}
         <Link href="/cart" className="hidden lg:flex">
           <motion.div
             whileHover={{
@@ -105,12 +119,12 @@ export const Navbar = ({
           }}
           whileTap={{
             opacity: 1,
-            scale: 0.9,
             transition: { duration: 0.2 },
           }}
-          // onClick={openMenu}
+          onClick={toggleMenu}
           className="flex lg:hidden p-2 items-center bg-background-primary rounded-lg"
         >
+          {isMenuOpen && <MenuModal />}
           <img className="w-6 h-6" src="/icons/menu.svg" alt="menu" />
         </motion.div>
       </div>
@@ -118,65 +132,80 @@ export const Navbar = ({
   );
 };
 
-interface MenuModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export const MenuModal: React.FC<MenuModalProps> = ({ isOpen, onClose }) => {
+// NAVIGATION BAR RESPONSIVE MOBILE MENU
+export const MenuModal = () => {
   return (
     <>
-      {/* Overlay */}
-      <div className={`overlay ${isOpen ? "show" : ""}`} onClick={onClose} />
-
       {/* Menu */}
-      <div
-        className={`menu-modal ${isOpen ? "open" : ""} ${
-          quicksand.className
-        } bg-background-brand rounded-2xl m-2 p-4`}
+      <motion.div
+        className={`${quicksand.className} bg-background-brand p-8 absolute left-0 top-[76px] w-full`}
       >
-        <div className="menu-content text-content-invert">
-          <h2>Menu</h2>
+        <div className="text-content-invert">
+          <div className="logo flex items-center gap-4">
+            <a
+              href="/home"
+              className="flex justify-center items-center gap-4 mb-2"
+            >
+              <img src="/logo/logogram.svg" alt="" className="w-8" />
+              <h1
+                className={`${quicksand.className} flex justify-center items-center font-bold text-content-invert`}
+              >
+                YumBox
+              </h1>
+            </a>
+          </div>
           <ul>
-            <motion.li
-              className="p-3 rounded-lg"
-              whileHover={{
-                backgroundColor: "green",
-              }}
-              whileTap={{ backgroundColor: "white", opacity: 0.7 }}
-            >
-              Home
-            </motion.li>
-            <motion.li
-              className="p-3 rounded-lg"
-              whileHover={{
-                backgroundColor: "green",
-              }}
-              whileTap={{ backgroundColor: "white", opacity: 0.7 }}
-            >
-              About
-            </motion.li>
-            <motion.li
-              className="p-3 rounded-lg"
-              whileHover={{
-                backgroundColor: "green",
-              }}
-              whileTap={{ backgroundColor: "white", opacity: 0.7 }}
-            >
-              Services
-            </motion.li>
-            <motion.li
-              className="p-3 rounded-lg"
-              whileHover={{
-                backgroundColor: "green",
-              }}
-              whileTap={{ backgroundColor: "white", opacity: 0.7 }}
-            >
-              Contact
-            </motion.li>
+            <Link href="/categories">
+              <motion.li
+                className="p-3 rounded-lg"
+                whileHover={{
+                  backgroundColor: "green",
+                }}
+                whileTap={{
+                  backgroundColor: "white",
+                  opacity: 0.7,
+                  color: "green",
+                  transition: { duration: 0.2 },
+                }}
+              >
+                Categories
+              </motion.li>
+            </Link>
+            <Link href="/deals">
+              <motion.li
+                className="p-3 rounded-lg"
+                whileHover={{
+                  backgroundColor: "green",
+                }}
+                whileTap={{
+                  backgroundColor: "white",
+                  opacity: 0.7,
+                  color: "green",
+                  transition: { duration: 0.2 },
+                }}
+              >
+                Deals
+              </motion.li>
+            </Link>
+            <Link href="/support">
+              <motion.li
+                className="p-3 rounded-lg"
+                whileHover={{
+                  backgroundColor: "green",
+                }}
+                whileTap={{
+                  backgroundColor: "white",
+                  opacity: 0.7,
+                  color: "green",
+                  transition: { duration: 0.2 },
+                }}
+              >
+                Help/Support
+              </motion.li>
+            </Link>
           </ul>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };
